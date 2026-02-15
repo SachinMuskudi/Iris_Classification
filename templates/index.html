@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iris · dark glass</title>
+  <!-- Google Font & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at 10% 30%, #1a2f3f, #0b1820);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .dashboard {
+      max-width: 1400px;
+      width: 100%;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    /* --- left panel (input) --- */
+    .input-panel {
+      flex: 1 1 320px;
+      background: rgba(18, 30, 41, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 2.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transition: 0.3s;
+    }
+
+    .input-panel:hover {
+      border-color: rgba(0, 255, 200, 0.3);
+      box-shadow: 0 25px 50px -8px #00cc9966;
+    }
+
+    .input-panel h2 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      text-align: center;
+      background: linear-gradient(145deg, #a0f0ea, #76d2ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+    }
+
+    .input-panel h2 i {
+      font-size: 2.2rem;
+      color: #64ffda;
+      text-shadow: 0 0 15px #64ffda;
+    }
+
+    /* input field with icon */
+    .input-field {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-field i {
+      position: absolute;
+      left: 1.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.3rem;
+      color: #64ffda;
+      opacity: 0.8;
+    }
+
+    .input-field input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      background: rgba(10, 25, 35, 0.8);
+      border: 1.5px solid rgba(100, 255, 218, 0.2);
+      border-radius: 3rem;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #e2f3ff;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    .input-field input:focus {
+      border-color: #64ffda;
+      background: rgba(10, 25, 35, 0.95);
+      box-shadow: 0 0 15px #64ffda33;
+    }
+
+    .input-field input::placeholder {
+      color: #a0b8cc;
+      font-weight: 400;
+      opacity: 0.6;
+    }
+
+    /* model toggles (radio) */
+    .model-toggles {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin: 2rem 0 2.5rem;
+    }
+
+    .model-toggles label {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(255,255,255,0.02);
+      padding: 0.6rem 1.4rem;
+      border-radius: 3rem;
+      border: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: 0.2s;
+      color: #b0d4f0;
+      font-weight: 500;
+    }
+
+    .model-toggles label:has(input:checked) {
+      background: #1e3b4a;
+      border-color: #64ffda;
+      box-shadow: 0 0 20px #64ffda40;
+      color: white;
+    }
+
+    .model-toggles input[type="radio"] {
+      appearance: none;
+      width: 1.2rem;
+      height: 1.2rem;
+      border: 2px solid #4f7f9c;
+      border-radius: 50%;
+      transition: 0.1s;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .model-toggles input[type="radio"]:checked {
+      border-color: #64ffda;
+      background: #64ffda;
+      box-shadow: 0 0 10px #64ffda;
+    }
+
+    .model-toggles input[type="radio"]:checked::after {
+      content: "";
+      display: block;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: #0b1820;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* predict button */
+    .predict-btn {
+      width: 100%;
+      padding: 1.1rem;
+      background: linear-gradient(145deg, #006d77, #0b3b4f);
+      border: none;
+      border-radius: 3rem;
+      color: white;
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      cursor: pointer;
+      transition: 0.25s;
+      border: 1px solid rgba(100, 255, 218, 0.2);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+    }
+
+    .predict-btn:hover {
+      background: linear-gradient(145deg, #0b8b99, #115b73);
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px #64ffda33;
+      border-color: #64ffda;
+    }
+
+    .predict-btn i {
+      font-size: 1.3rem;
+    }
+
+    /* --- right panel (results) --- */
+    .results-panel {
+      flex: 2 1 550px;
+      background: rgba(18, 30, 41, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 2.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      transition: 0.3s;
+      display: none; /* hidden until first prediction */
+    }
+
+    .results-panel.visible {
+      display: block;
+      animation: fadeSlide 0.4s ease;
+    }
+
+    @keyframes fadeSlide {
+      0% { opacity: 0; transform: translateY(15px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .results-panel h2 {
+      font-size: 2rem;
+      font-weight: 600;
+      text-align: center;
+      color: #a0f0ea;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      border-bottom: 2px solid #2d4f62;
+      padding-bottom: 1rem;
+    }
+
+    .prediction-badge {
+      background: linear-gradient(145deg, #1c4b5a, #0f3340);
+      border-radius: 4rem;
+      padding: 1.2rem 2rem;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #d0f3ff;
+      margin-bottom: 2rem;
+      border: 1px solid #64ffda;
+      box-shadow: 0 0 20px #64ffda40;
+      word-break: break-word;
+    }
+
+    .prediction-badge i {
+      color: #64ffda;
+      margin-right: 1rem;
+    }
+
+    /* train / test sections */
+    .result-section {
+      background: rgba(10, 25, 35, 0.6);
+      border-radius: 2rem;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .result-section h3 {
+      font-size: 1.5rem;
+      font-weight: 500;
+      color: #b0e0ff;
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .metric-card {
+      background: #10263033;
+      border-radius: 1.5rem;
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-left: 5px solid #64ffda;
+    }
+
+    .metric-label {
+      font-weight: 500;
+      color: #b0d4f0;
+      font-size: 1.1rem;
+    }
+
+    .metric-value {
+      font-weight: 700;
+      font-size: 1.4rem;
+    }
+
+    /* accuracy coloring */
+    .metric-value.green { color: #5effb2; }
+    .metric-value.yellow { color: #ffd966; }
+    .metric-value.red { color: #ff7b7b; }
+
+    /* confusion matrix table */
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      background: #0d2a33;
+      border-radius: 1.2rem;
+      overflow: hidden;
+    }
+    .matrix-table td {
+      border: 1px solid #2d5f70;
+      padding: 0.8rem;
+      text-align: center;
+      color: #b0f0ff;
+      font-weight: 500;
+    }
+
+    /* classification report */
+    .report-pre {
+      background: #0d1f28;
+      padding: 1.2rem;
+      border-radius: 1rem;
+      color: #b0f0ff;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      border: 1px solid #2d5f70;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .sub-head {
+      color: #64ffda;
+      font-weight: 500;
+      margin: 1rem 0 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 800px) {
+      .dashboard { flex-direction: column; }
+      .input-panel, .results-panel { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="dashboard">
+  <!-- LEFT: INPUT PANEL -->
+  <div class="input-panel">
+    <h2><i class="fas fa-feather-alt"></i> Iris Glass</h2>
+
+    <div class="input-field">
+      <i class="fas fa-arrows-alt-v"></i>
+      <input type="number" id="sl" placeholder="Sepal Length (cm)" step="any">
+    </div>
+    <div class="input-field">
+      <i class="fas fa-arrows-alt-h"></i>
+      <input type="number" id="sw" placeholder="Sepal Width (cm)" step="any">
+    </div>
+    <div class="input-field">
+      <i class="fas fa-ruler"></i>
+      <input type="number" id="pl" placeholder="Petal Length (cm)" step="any">
+    </div>
+    <div class="input-field">
+      <i class="fas fa-ruler-combined"></i>
+      <input type="number" id="pw" placeholder="Petal Width (cm)" step="any">
+    </div>
+
+    <!-- model selection as toggles -->
+    <div class="model-toggles">
+      <label>
+        <input type="radio" name="model" value="knn" checked> KNN
+      </label>
+      <label>
+        <input type="radio" name="model" value="nb"> Naïve Bayes
+      </label>
+    </div>
+
+    <button class="predict-btn" onclick="predict()">
+      <i class="fas fa-play"></i> Predict
+    </button>
+  </div>
+
+  <!-- RIGHT: RESULTS PANEL (hidden initially) -->
+  <div class="results-panel" id="resultsPanel">
+    <h2><i class="fas fa-chart-pie"></i> Performance</h2>
+
+    <div class="prediction-badge" id="predictionDisplay">
+      <i class="fas fa-seedling"></i> <span>Waiting for input...</span>
+    </div>
+
+    <!-- TRAIN RESULTS -->
+    <div class="result-section">
+      <h3><i class="fas fa-database"></i> Train set</h3>
+      <div class="metric-card">
+        <span class="metric-label">Accuracy</span>
+        <span class="metric-value" id="trainAcc">—</span>
+      </div>
+      <div class="sub-head"><i class="fas fa-th"></i> Confusion matrix</div>
+      <div id="trainCM" class="matrix-placeholder"></div>
+      <div class="sub-head"><i class="fas fa-scroll"></i> Classification report</div>
+      <pre class="report-pre" id="trainReport">—</pre>
+    </div>
+
+    <!-- TEST RESULTS -->
+    <div class="result-section">
+      <h3><i class="fas fa-flask"></i> Test set</h3>
+      <div class="metric-card">
+        <span class="metric-label">Accuracy</span>
+        <span class="metric-value" id="testAcc">—</span>
+      </div>
+      <div class="sub-head"><i class="fas fa-th"></i> Confusion matrix</div>
+      <div id="testCM" class="matrix-placeholder"></div>
+      <div class="sub-head"><i class="fas fa-scroll"></i> Classification report</div>
+      <pre class="report-pre" id="testReport">—</pre>
+    </div>
+  </div>
+</div>
+
+<script>
+// Helper to build an HTML table from a matrix
+function formatMatrix(matrix) {
+  if (!matrix || !Array.isArray(matrix)) return '<div>—</div>';
+  let html = '<table class="matrix-table">';
+  for (let row of matrix) {
+    html += '<tr>';
+    for (let val of row) {
+      html += `<td>${val}</td>`;
+    }
+    html += '</tr>';
+  }
+  html += '</table>';
+  return html;
+}
+
+// Color code accuracy and update element
+function setAccuracy(elementId, value) {
+  const el = document.getElementById(elementId);
+  if (!el) return;
+  el.classList.remove('green', 'yellow', 'red');
+  const num = parseFloat(value);
+  if (isNaN(num)) {
+    el.innerText = '—';
+    return;
+  }
+  el.innerText = value + '%';  // assume backend returns percentage string or number
+  if (num >= 90) el.classList.add('green');
+  else if (num >= 70) el.classList.add('yellow');
+  else el.classList.add('red');
+}
+
+function predict() {
+  // Get input values
+  const sl = document.getElementById('sl').value;
+  const sw = document.getElementById('sw').value;
+  const pl = document.getElementById('pl').value;
+  const pw = document.getElementById('pw').value;
+
+  // Get selected model
+  const modelElem = document.querySelector('input[name="model"]:checked');
+  const model = modelElem ? modelElem.value : 'knn';
+
+  // Basic validation (optional)
+  if (!sl || !sw || !pl || !pw) {
+    alert('Please fill all fields');
+    return;
+  }
+
+  // Fetch request (same endpoint as reference)
+  fetch('/predict', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ sl, sw, pl, pw, model })
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Show results panel
+    document.getElementById('resultsPanel').classList.add('visible');
+
+    // Update prediction
+    document.querySelector('#predictionDisplay span').innerText =
+      data.prediction || 'unknown';
+
+    // Train results
+    if (data.train_results) {
+      setAccuracy('trainAcc', data.train_results.accuracy);
+      document.getElementById('trainCM').innerHTML =
+        formatMatrix(data.train_results.confusion_matrix);
+      document.getElementById('trainReport').innerText =
+        data.train_results.classification_report || '—';
+    }
+
+    // Test results
+    if (data.test_results) {
+      setAccuracy('testAcc', data.test_results.accuracy);
+      document.getElementById('testCM').innerHTML =
+        formatMatrix(data.test_results.confusion_matrix);
+      document.getElementById('testReport').innerText =
+        data.test_results.classification_report || '—';
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert('Error contacting server');
+  });
+}
+</script>
+</body>
+</html>
